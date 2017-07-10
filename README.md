@@ -157,57 +157,64 @@ COMPARITOR
 
 START 
 
-    IF MAC
+    IF (MAC Site1)
        
-       IF (DATA MAC == MAC)
+       IF (Packet_Header1)
        
-          RETURN Correct; 
+         RETURN True; 
+
+       ELSEIF (Packet_Header2)
+       
+         RETURN True;
+
+       ELSEIF (Packet_Header3)
+       
+         RETURN True;
 
        ELSE 
- 
-          RETURN Incorrect; 
-    
+  
+           RETURN TRN_Board_IPError;
+
        ENDIF
-
-    ELSE IF (IP)
-
-       IF (DATA IP == IP)
+   
+    IF (MAC site2)
+        
+       IF (Packet_Header1)
        
-         RETURN Correct; 
+         RETURN True;
+
+       ELSEIF (Packet_Header2)
        
-       ELSE 
+         RETURN True;
+        
+       ELSE
+         
+           RETURN TRN_Board_IPError;
+    
+    ELSE 
 
-         RETURN Incorrect;
-
-       ENDIF 
+         RETURN Site_Error;  
    
     ENDIF 
 
 END 
 
-
     
-ERROR CHECK
+ERROR CHECK(Error, Error_Code, MAc)
 
 
 START 
      
 
-      IF Error Code 1
+      IF Error == 1
 
-             Error LED(1);
+             LIGHT LED(Error,Error_code);
 
-      ELSE IF Error Code 2
-      
-             Error LED(2);
- 
-      ELSE IF Error Code 3
+      ELSE IF Error Code1 == 0
        
-             Error LED(Comparitor(MAC));
-    
-      ELSE IF Error Code 
-
-             Error LED(comparitor(IP));
+             LIGHT LED(Comparitor(MAC));  //Mac global variable
+      ELSE 
+             LIGHT LED(Error,Error_code);
      
       ENDIF
 
@@ -217,13 +224,14 @@ END
 
 
 
-ERROR LED 
+
+LIGHT_LED 
 
 START 
      
-     IF Error Code1 == 1
+     IF Error Code == 1
 
-        IF Error Code2 == 1
+        IF Error == 1
  
            LED ON (1);
 
@@ -235,9 +243,9 @@ START
 
      ENDIF
     
-     IF Error Code1 == 2
+     IF Error Code == 2
 
-        IF Error Code2 == 1
+        IF Error == 1
  
            LED ON (2);
 
@@ -249,9 +257,9 @@ START
 
      ENDIF
               
-     IF Error Code1 == 3
+     IF Error Code == 3
 
-        IF Error Code2 == 1
+        IF Error == 1
  
            LED ON (3);
 
@@ -264,22 +272,33 @@ START
       ENDIF
 
       
-     IF Error Code1 == 4
+     IF Error Code 4
 
-        IF Error Code2 == 1
+        IF Error== 1
  
            LED ON (4);
 
         Else 
 
            LED OFF (4);
+      ENDIF
+
+       IF Error Code== 5
+
+        IF Error == 1
+ 
+           LED ON (5);
+
+        Else 
+
+           LED OFF (5);
      
         ENDIF
+
 
      ENDIF
 
 END 
-
 
 
 LED ON 
@@ -314,5 +333,29 @@ START
 END 
 
 
+Initialise Variables
+
+START
+
+     
+      IF Site MAC == Site1
+        
+        SET IP TRN1 to ...
+        SET IP TRN2 to...
+        SET IP TRN3 to...
+        Error Check(Error code)
+        complete =1;
+      ELSEIF Site MAC == Site2
+  
+        SET IP TRN1 to ...
+        SET IP TRN2 to...
+        MASK IP TRN3 
+        Error Check(Error Code)
+        complete =1;
+      ELSE
+   
+        Error Check(Error Code)
+        complete =0;
+END 
 
 
